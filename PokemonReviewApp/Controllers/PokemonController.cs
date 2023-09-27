@@ -29,7 +29,7 @@ namespace PokemonReviewApp.Controllers {
             return Ok(pokemons);
         }
 
-        [HttpPost ("{pokeId}")]
+        [HttpGet("{pokeId}")]
         [ProducesResponseType (200, Type = typeof (Pokemon))]
         [ProducesResponseType (400)]
 
@@ -45,7 +45,7 @@ namespace PokemonReviewApp.Controllers {
             return Ok(pokemon);
         }
 
-        [HttpPost("{pokeId}/rating")]
+        [HttpGet("{pokeId}/rating")]
         [ProducesResponseType(200, Type = typeof(decimal))]
         [ProducesResponseType(400)]
 
