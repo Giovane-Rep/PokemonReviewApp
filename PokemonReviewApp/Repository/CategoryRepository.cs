@@ -8,13 +8,19 @@ namespace PokemonReviewApp.Repository {
 
         private DataContext _context;
 
-        public CategoryRepository(DataContext context, IMapper mapper)
+        public CategoryRepository(DataContext context)
         {
             _context = context;
         }
 
         public bool CategoryExists (int id) {
             return _context.Categories.Any(c => c.Id == id);
+        }
+
+        public bool CreateCategory(Category category) {
+            //Change Tracker
+            _context.Add(category);
+            return Save();
         }
 
         public ICollection<Category> GetCategories() {
@@ -27,6 +33,11 @@ namespace PokemonReviewApp.Repository {
 
         public ICollection<Pokemon> GetPokemonByCategory (int categoryId) {
             return _context.PokemonCategories.Where(c => c.CategoryId == categoryId).Select(p => p.Pokemon).ToList();
+        }
+
+        public bool Save() {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
         }
     }
 }
