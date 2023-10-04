@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PokemonReviewApp.Dto;
 using PokemonReviewApp.Interfaces;
 using PokemonReviewApp.Models;
+using System.Reflection.Metadata.Ecma335;
 
 namespace PokemonReviewApp.Controllers {
     [Route("api/[controller]")]
@@ -106,6 +107,26 @@ namespace PokemonReviewApp.Controllers {
             if (!_countryRepository.UpdateCountry(countryMap)) {
                 ModelState.AddModelError("", "Something went wrong updating Country");
                 StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete("{countryId}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult DeleteCountry(int countryId) {
+            if (!_countryRepository.CountryExists(countryId))
+                return NotFound();
+
+            var countryToDelete = _countryRepository.GetCountry(countryId);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if(!_countryRepository.DeleteCountry(countryToDelete)) {
+                ModelState.AddModelError("", "Something went wrong deleting Country");
             }
 
             return NoContent();
